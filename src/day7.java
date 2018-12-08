@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 public class day7 {
     static String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
     public static void main(String[] args) {
         HashMap<String, String> mapOfDependencies = new HashMap<>();
         HashMap<String, Integer> mapOfTime = new HashMap<>();
