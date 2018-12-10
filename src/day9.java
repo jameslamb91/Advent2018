@@ -13,6 +13,7 @@ public class day9 {
         int currentPlayer = 0;
 
         currentMarble.add(currentMarble, currentMarble);
+
         for(int i = 1; i <= FINAL_MARBLE_NUMBER; i++){
 
 
@@ -53,14 +54,6 @@ public class day9 {
             this.number = number;
         }
 
-        private Marble rotateRight(){
-            return this.next;
-        }
-
-        private Marble rotateLeft() {
-            return this.prev;
-        }
-
         private void add(Marble prev, Marble next){
             next.prev = this;
             prev.next = this;
@@ -72,7 +65,6 @@ public class day9 {
             next.prev = this.prev;
             prev.next = this.next;
         }
-
 
         private int getNumber(){
             return this.number;
