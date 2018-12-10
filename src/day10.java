@@ -1,8 +1,5 @@
-import sun.jvm.hotspot.types.PointerType;
-
 import java.io.*;
 import java.util.ArrayList;
-
 public class day10 {
     public static void main(String[] args) {
         File file = new File("/Users/corey.lamb/Documents/workspace-sts-3.9.2.RELEASE/Advent2018/src/day10input");
@@ -21,50 +18,40 @@ public class day10 {
             int maxDistance = 300;
             int count = 0;
             while (true){
-
                 if(maxDistance < 100){
                     System.out.println("Below graph took " + count + " seconds");
                     graphPoints(listOfPoints);
                 }
                 count++;
                 for(Point p : listOfPoints){
-
                     p.move();
                 }
-
                 maxDistance = getMaxDistanceBetweenPoints(listOfPoints);
             }
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
     private static class Point {
         int xPos;
         int yPos;
         int xVel;
         int yVel;
-
         private Point(int xPos, int yPos, int xVel, int yVel){
             this.xPos = xPos;
             this.yPos = yPos;
             this.xVel = xVel;
             this.yVel = yVel;
         }
-
         private void move(){
             xPos += xVel;
             yPos += yVel;
         }
     }
-
     private static int getMaxDistanceBetweenPoints(ArrayList<Point> pList){
         int maxDistance = Integer.MIN_VALUE;
-
         for(Point p1 : pList){
             for (Point p2 : pList){
                 if(p1.equals(p2)){
@@ -77,16 +64,13 @@ public class day10 {
             }
 
         }
-
          return maxDistance;
     }
-
     private static void graphPoints(ArrayList<Point> pList){
         int minX = Integer.MAX_VALUE;
         int maxX = Integer.MIN_VALUE;
         int minY = Integer.MAX_VALUE;
         int maxY = Integer.MIN_VALUE;
-
         for (Point p : pList){
             if(p.xPos < minX){
                 minX = p.xPos;
@@ -100,7 +84,6 @@ public class day10 {
             if(p.yPos > maxY){
                 maxY = p.yPos;
             }
-
         }
         System.out.println("GRAPH STARTED");
         for(int i = minY; i < maxY +1; i++){
