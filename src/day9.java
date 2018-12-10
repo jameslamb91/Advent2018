@@ -1,91 +1,81 @@
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class day9 {
-    static final int NUMBER_OF_PLAYERS = 10;//413;
-    static final int FINAL_MARBLE_NUMBER = 1618;//71082;
+    static final int NUMBER_OF_PLAYERS = 413;
+    static final int FINAL_MARBLE_NUMBER = 71082 * 100; // times 100 for part 2
+    static long[] players = new long[NUMBER_OF_PLAYERS];
 
     public static void main(String[] args) {
 
-        int[] players = new int[NUMBER_OF_PLAYERS];
+
+        Marble currentMarble = new Marble(0);
+
         int currentPlayer = 0;
 
-        List<Integer> marbles = new ArrayList<>();
-        int marbleNumber = 0;
-        int currentMarbleIndex = 0;
-        HashMap<Integer, Boolean> isPlaced = new HashMap<>();
+        currentMarble.add(currentMarble, currentMarble);
+        for(int i = 1; i <= FINAL_MARBLE_NUMBER; i++){
 
-        while(marbleNumber <= FINAL_MARBLE_NUMBER) {
 
-            int scoreToAdd;
-
-            // This marble will be listed as placed so we don't try to re-place it.
-            isPlaced.put(marbleNumber, true);
-
-            if(marbleNumber == 0 || marbleNumber % 23 != 0){
-            // normal case
-
-                // add marble to current spot
-                marbles.add(currentMarbleIndex, marbleNumber);
-
-                // add 2 to the current spot
-                currentMarbleIndex = (currentMarbleIndex - 2 + marbles.size()) % marbles.size();
-
+            if((i > 0) && (i % 23 == 0)){
+                // do scoring stuff
+                players[currentPlayer] += i;
+                currentMarble = currentMarble.prev.prev.prev.prev.prev.prev.prev;
+                players[currentPlayer] += currentMarble.getNumber();
+                currentMarble.remove(currentMarble.prev, currentMarble.next);
+                currentMarble = currentMarble.next;
             }
             else{
-            // scoring case
-
-                // score instead of placing
-                scoreToAdd = marbleNumber;
-
-                // get the marble 7 marbles to the left
-                currentMarbleIndex = (currentMarbleIndex  + 7) % marbles.size();
-                int marbleToRemove = marbles.get(currentMarbleIndex);
-
-                // add marble to remove to the score
-                scoreToAdd += marbleToRemove;
-
-                // remove marble
-                marbles.remove(currentMarbleIndex);
-
-                // allow it to be picked to place
-                isPlaced.put(marbleToRemove, false);
-
-                // add score to current player
-                players[currentPlayer] += scoreToAdd;
+                // add like normal
+                Marble m = new Marble(i);
+                m.add(currentMarble.next, currentMarble.next.next);
+                currentMarble = m;
             }
-
-            // get lowest number non placed marble
-            marbleNumber = getNextMarbleToPlace(isPlaced);
-
-            // go to the next player
-            currentPlayer = (currentPlayer + 1) % players.length;
-
+            currentPlayer = (currentPlayer + 1) % NUMBER_OF_PLAYERS;
         }
 
-        // get max score
-        int max = Integer.MIN_VALUE;
-        for(int i : players){
-            if (i > max){
-                max = i;
+        long maxScore = Integer.MIN_VALUE;
+        for(long i : players){
+            if (i > maxScore){
+                maxScore = i;
             }
         }
-        System.out.println(max);
+
+        System.out.println(maxScore);
     }
 
-    private static int getNextMarbleToPlace(HashMap<Integer, Boolean> map){
+    private static class Marble {
 
+        Marble next;
+        Marble prev;
+        int number;
 
-        // find the lowest number in the map that hasn't been placed
-        for(int i = 0; i < map.size(); i++){
-            if(!map.containsKey(i) || (map.containsKey(i) && !map.get(i))){
-                return i;
-            }
+        Marble(int number){
+            this.number = number;
         }
 
-        // if everything in the map has been placed, return the map size to place the next marble
-        return map.size();
-    }
+        private Marble rotateRight(){
+            return this.next;
+        }
 
+        private Marble rotateLeft() {
+            return this.prev;
+        }
+
+        private void add(Marble prev, Marble next){
+            next.prev = this;
+            prev.next = this;
+            this.next = next;
+            this.prev = prev;
+        }
+
+        private void remove(Marble prev, Marble next){
+            next.prev = this.prev;
+            prev.next = this.next;
+        }
+
+
+        private int getNumber(){
+            return this.number;
+        }
+    }
 }
