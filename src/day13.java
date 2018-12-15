@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class day13 {
     static ArrayList<String> tracks = new ArrayList<>();
@@ -62,18 +61,9 @@ public class day13 {
                             System.out.println("Collision at: " + c.x + "," + c.y);
 
                         }
-
                     }
                 }
-
-                if(checkForOnlyOneLivingCart()){
-                    for(Cart lastCart : carts){
-                        if (!lastCart.dead){
-                            System.out.println("Last cart at: " + lastCart.x + "," + lastCart.y);
-                        }
-                    }
-                }
-
+                sortCarts();
             }
 
 
@@ -86,8 +76,28 @@ public class day13 {
         }
     }
 
+    private static void sortCarts(){
+        ArrayList<Cart> temp = carts;
+
+        boolean notSorted = true;
+        while(notSorted){
+            notSorted = false;
+            for(int i = 0; i < temp.size()-1; i++){
+                if((temp.get(i).y > temp.get(i+1).y) || ((temp.get(i).y == temp.get(i+1).y) && (temp.get(i).x > temp.get(i+1).x))){
+                    temp.add(i, temp.get(i+1));
+                    temp.remove(i+2);
+                    notSorted = true;
+                }
+            }
+        }
+        carts = temp;
+
+    }
+
     private static void turnCartIfNeeded(Cart c) {
-        if (tracks.get(c.y).charAt(c.x) == '/') {
+        char track = tracks.get(c.y).charAt(c.x);
+
+        if (track == '/') {
             if (c.direction == 'u') {
                 c.direction = 'r';
             } else if (c.direction == 'd') {
@@ -97,7 +107,7 @@ public class day13 {
             } else {
                 c.direction = 'u';
             }
-        } else if (tracks.get(c.y).charAt(c.x) == '\\') {
+        } else if (track == '\\') {
             if (c.direction == 'u') {
                 c.direction = 'l';
             } else if (c.direction == 'd') {
@@ -107,7 +117,7 @@ public class day13 {
             } else {
                 c.direction = 'd';
             }
-        } else if (tracks.get(c.y).charAt(c.x) == '+') {
+        } else if (track == '+') {
             if (c.turn % 3 == 0) {
                 if (c.direction == 'u') {
                     c.direction = 'l';
@@ -158,6 +168,8 @@ public class day13 {
     }
 
     private static class Cart{
+        int startX;
+        int startY;
         int x;
         int y;
         char direction;
@@ -165,6 +177,8 @@ public class day13 {
         boolean dead;
 
         private Cart(int x, int y, char direction){
+            this.startX = x;
+            this.startY = y;
             this.x = x;
             this.y = y;
             this.direction = direction;
