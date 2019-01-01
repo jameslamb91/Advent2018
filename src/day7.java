@@ -38,8 +38,8 @@ public class day7 {
             }
 
 
-//            mapOfDependencies.remove(String.valueOf(c));
-//            allSteps = removeCharFromString(allSteps, c);
+//            mapOfDependencies.remove(String.valueOf(location));
+//            allSteps = removeCharFromString(allSteps, location);
 
             while(!allSteps.isEmpty()){
 

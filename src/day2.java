@@ -13,8 +13,8 @@ public class day2 {
             while ((input = br.readLine()) != null){
                 inputList.add(input);
 
-//                for (char c : input.toCharArray()){
-//                    int num = (numOfChar(c, input));
+//                for (char location : input.toCharArray()){
+//                    int num = (numOfChar(location, input));
 //                    if(num == 2 && !twoList.contains(input)){
 //                        twoList.add(input);
 //                    }
